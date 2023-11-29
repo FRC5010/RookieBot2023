@@ -15,7 +15,7 @@ public class IntakeSubsystem extends SubsystemBase {
   CANSparkMax rightIntakeMotor;
   
   /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem(CANSparkMax leftIntakeMotor, CANSparkMax rightIntakeMotor) {
+  public IntakeSubsystem() {
  
     leftIntakeMotor = new CANSparkMax(id, MotorType.kBrushless);
     rightIntakeMotor = new CANSparkMax(id, MotorType.kBrushless);
