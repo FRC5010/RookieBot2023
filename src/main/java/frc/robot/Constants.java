@@ -84,5 +84,14 @@ public final class Constants {
     public static final int kDriverXAxis = 0;
     public static final int kDriverRotAxis = 4;
     public static final int kDriverFieldOrientedButtonIdx = 1;
+    public static final int kOperatorControllerPort = 1;
+    public static final int kOperatorYAxis = 1;
+  }
+
+  public static final class PivotConstants {
+    public static final double pivotConversionFactor = 24.242; // Converts rotation of motor to rotation of axel
+    public static final int pivotMotorId = 9;
+    public static final int minHallEffectSensorId = 1;
+    public static final int maxHallEffectSensorId = 8;
   }
 }
