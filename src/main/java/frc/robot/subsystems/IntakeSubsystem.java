@@ -5,20 +5,28 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends SubsystemBase {
-  CANSparkMax leftIntakeMotor;
-  CANSparkMax rightIntakeMotor;
-  
+
+  private CANSparkMax leftIntakeMotor;
+  private CANSparkMax rightIntakeMotor;
+  private DoubleSolenoid intakeSolenoid;
+
+  String intakeState;
+
   /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem() {
- 
-    leftIntakeMotor = new CANSparkMax(id, MotorType.kBrushless);
-    rightIntakeMotor = new CANSparkMax(id, MotorType.kBrushless);
+  public IntakeSubsystem(CANSparkMax leftIntakeMotor, CANSparkMax rightintakeMotor, DoubleSolenoid intakeSolenoid) {
+
+    this.intakeSolenoid = intakeSolenoid;
+    intakeSolenoid.set(DoubleSolenoid.Value.kOff);
+
+    this.leftIntakeMotor = leftIntakeMotor;
+    this.rightIntakeMotor = rightintakeMotor;
+
   }
 
   public void runMotors(double speed) {
@@ -31,8 +39,32 @@ public class IntakeSubsystem extends SubsystemBase {
     rightIntakeMotor.stopMotor();
   }
 
+  public void toggleIntake() {
+    if (intakeSolenoid.isFwdSolenoidDisabled()) {
+      setIntakeCone();
+    }
+    intakeSolenoid.toggle();
+  }
+
+  public void setIntakeCube() { // Cube
+    intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+
+  public void setIntakeCone() { // Cone
+    intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void disableIntake() {
+    intakeSolenoid.set(DoubleSolenoid.Value.kOff);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run.
+    SmartDashboard.putBoolean("IsIntakeCone", isIntakeCone());
+  }
+
+  public boolean isIntakeCone() {
+    return intakeSolenoid.get().equals(DoubleSolenoid.Value.kForward);
   }
 }
