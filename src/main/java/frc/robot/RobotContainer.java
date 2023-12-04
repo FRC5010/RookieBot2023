@@ -40,6 +40,7 @@ public class RobotContainer {
   // 18 right 19 left
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(new CANSparkMax(19, MotorType.kBrushless),
       new CANSparkMax(18, MotorType.kBrushless), new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1));
+      // TODO: Channels might need to be switched
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem(
       new CANSparkMax(Constants.PivotConstants.pivotMotorId, MotorType.kBrushless),
       new DigitalInput(Constants.PivotConstants.minHallEffectSensorId),
