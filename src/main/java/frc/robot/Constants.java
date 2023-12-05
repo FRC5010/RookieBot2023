@@ -94,4 +94,9 @@ public final class Constants {
     public static final int minHallEffectSensorId = 1;
     public static final int maxHallEffectSensorId = 8;
   }
+
+  public static final class ElevatorConstants {
+    public static final int elevatorMotorId = 11;
+    public static final int minHallEffectSensorId = 0;
+  }
 }

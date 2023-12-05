@@ -56,4 +56,8 @@ public class PivotSubsystem extends SubsystemBase {
   public boolean isAtMax() {
     return maxHallEffectSensor.get();
   }
+
+  public double pivotFeedFoward(double angle) {
+    return Math.cos(angle) * 1; // Change 1 to constant
+  }
 }

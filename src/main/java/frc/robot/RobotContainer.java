@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.Elevator;
 import frc.robot.commands.PivotElevator;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -34,6 +37,9 @@ public class RobotContainer {
     new CANSparkMax(Constants.PivotConstants.pivotMotorId, MotorType.kBrushless), 
     new DigitalInput(Constants.PivotConstants.minHallEffectSensorId),
     new DigitalInput(Constants.PivotConstants.maxHallEffectSensorId));
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(new CANSparkMax(
+      ElevatorConstants.elevatorMotorId, MotorType.kBrushless), 
+      new DigitalInput(ElevatorConstants.minHallEffectSensorId));
 
   private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
   private final Joystick operatorJoystick = new Joystick(OIConstants.kOperatorYAxis);
@@ -47,7 +53,10 @@ public class RobotContainer {
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRotAxis), // +
       () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
     
-    pivotSubsystem.setDefaultCommand(new PivotElevator(pivotSubsystem, () -> operatorJoystick.getRawAxis(OIConstants.kOperatorYAxis)));
+    /* pivotSubsystem.setDefaultCommand(
+        new PivotElevator(pivotSubsystem, () -> operatorJoystick.getRawAxis(OIConstants.kOperatorYAxis))); */
+    
+    elevatorSubsystem.setDefaultCommand(new Elevator(elevatorSubsystem, () -> operatorJoystick.getRawAxis(OIConstants.kOperatorYAxis)));
     // Configure the trigger bindings
     configureBindings();
   }

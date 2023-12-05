@@ -4,12 +4,72 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
+
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  
+  private final CANSparkMax elevatorMotor;
+  private final RelativeEncoder alternateElevatorEncoder;
+  private final DigitalInput minHallEffectSensor;
+
   /** Creates a new ElevatorSubsystem. */
-  public ElevatorSubsystem() {}
+  public ElevatorSubsystem(CANSparkMax elevatorMotor, DigitalInput minHallEffectSensor) {
+    this.elevatorMotor = elevatorMotor;
+    this.alternateElevatorEncoder = elevatorMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192);
+    alternateElevatorEncoder.setPositionConversionFactor(Units.inchesToMeters(15.45));
+    this.minHallEffectSensor = minHallEffectSensor;
+  }
+
+  public double getElevatorMotorPosition() {
+    return alternateElevatorEncoder.getPosition();
+  }
+
+  public void zeroElevatorMotorEncoder() {
+    alternateElevatorEncoder.setPosition(0);
+  }
+
+  public double getElevatorMotorSpeed() {
+    return elevatorMotor.get();
+  }
+
+  public void setElevatorMotorSpeed(double speed) {
+    if (ensureElevatorSafety()) {
+      elevatorMotor.set(speed);
+    }
+  }
+
+  public boolean ensureElevatorSafety() {
+    if (elevatorAtMin() && getElevatorMotorSpeed() < 0) {
+      elevatorMotor.set(0);
+      zeroElevatorMotorEncoder();
+      return false;
+    } else if (elevatorAtMax() && getElevatorMotorSpeed() > 0) {
+      elevatorMotor.set(0);
+      return false;
+    }
+    return true;
+  }
+
+  public boolean elevatorAtMin() {
+    return minHallEffectSensor.get();
+  }
+
+  public boolean elevatorAtMax() {
+    if (getElevatorMotorPosition() >= 1.980) { // Change 0 to rotation value
+      return true;
+    }
+    return false;
+  }
+
+  public double feedFoward(double angle) {
+    return Math.sin(angle) * 1; // Change 1 to actual contant value
+  }
 
   @Override
   public void periodic() {
