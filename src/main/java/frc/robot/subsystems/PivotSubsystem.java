@@ -4,32 +4,39 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.PivotConstants;
 
 public class PivotSubsystem extends SubsystemBase {
   private final CANSparkMax pivotMotor;
-  private final AbsoluteEncoder absolutePivotEncoder;
+  private final RelativeEncoder alternatePivotEncoder;
   private final DigitalInput minHallEffectSensor;
   private final DigitalInput maxHallEffectSensor;
   
   public PivotSubsystem(CANSparkMax pivotMotor, DigitalInput minHallEffectSensor, DigitalInput maxHallEffectSensor) {
     this.pivotMotor = pivotMotor;
-    this.absolutePivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    this.alternatePivotEncoder = pivotMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192);
+    alternatePivotEncoder.setPositionConversionFactor(PivotConstants.pivotConversionFactor);
+    alternatePivotEncoder.setInverted(true);
     this.minHallEffectSensor = minHallEffectSensor;
     this.maxHallEffectSensor = maxHallEffectSensor;
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Pivot Is Safe", ensurePivotSafety());
+    SmartDashboard.putBoolean("Pivot At Minimum", isAtMin());
+    SmartDashboard.putNumber("Pivot Position", getPivotMotorPosition());
   }
   
   public double getPivotMotorPosition() {
-    return absolutePivotEncoder.getPosition();
+    return alternatePivotEncoder.getPosition();
   }
 
   public double getPivotMotorSpeed() {
@@ -37,7 +44,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPivotSpeed(double speed) {
-    if (ensurePivotSafety())
+    if (isValidSpeed(speed))
       pivotMotor.set(speed);
   }
 
@@ -49,12 +56,26 @@ public class PivotSubsystem extends SubsystemBase {
     return true;
   }
 
+  public boolean isValidSpeed(double speed) {
+    if ((isAtMin() && speed < 0) || (isAtMax() && speed > 0)) {
+      return false;
+    }
+    return true;
+  }
+
   public boolean isAtMin() {
-    return minHallEffectSensor.get();
+    if (!minHallEffectSensor.get()) {
+      alternatePivotEncoder.setPosition(-8.8);
+      return true;
+    }
+    return false;
   }
 
   public boolean isAtMax() {
-    return maxHallEffectSensor.get();
+    if (getPivotMotorPosition() >= 35) {
+      return true;
+    }
+    return false;
   }
 
   public double pivotFeedFoward(double angle) {

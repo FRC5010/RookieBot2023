@@ -29,7 +29,7 @@ public class Elevator extends CommandBase {
   @Override
   public void execute() {
     double speed = -ySpeed.get();
-    elevatorSubsystem.setElevatorMotorSpeed(speed);
+    elevatorSubsystem.setElevatorMotorSpeed(speed / 4);
   }
 
   // Called once the command ends or is interrupted.

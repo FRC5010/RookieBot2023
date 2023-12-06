@@ -83,7 +83,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Minimum HallEffect Sensor", elevatorAtMin());
+    SmartDashboard.putBoolean("Elevator At Min", elevatorAtMin());
     SmartDashboard.putNumber("Elevator Motor Position", getElevatorMotorPosition());
     SmartDashboard.putNumber("Elevator Motor Speed", getElevatorMotorSpeed());
     SmartDashboard.putBoolean("Elevator Is At Max", elevatorAtMax());

@@ -26,8 +26,8 @@ public class PivotElevator extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = ySpeed.get();
-    pivotSubsystem.setPivotSpeed(speed / 10);
+    double speed = -ySpeed.get();
+    pivotSubsystem.setPivotSpeed(speed / 5);
   }
 
   // Called once the command ends or is interrupted.

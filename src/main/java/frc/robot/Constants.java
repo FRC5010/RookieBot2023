@@ -93,7 +93,7 @@ public final class Constants {
     public static final double pivotConversionFactor = 24.242; // Converts rotation of motor to rotation of axel
     public static final int pivotMotorId = 9;
     public static final int minHallEffectSensorId = 1;
-    public static final int maxHallEffectSensorId = 8;
+    public static final int maxHallEffectSensorId = 8; 
   }
 
   public static final class ElevatorConstants {
