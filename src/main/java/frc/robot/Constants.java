@@ -86,6 +86,7 @@ public final class Constants {
     public static final int kDriverFieldOrientedButtonIdx = 1;
     public static final int kOperatorControllerPort = 1;
     public static final int kOperatorYAxis = 1;
+    public static final int kOperatorYAxis2 = 5;
   }
 
   public static final class PivotConstants {

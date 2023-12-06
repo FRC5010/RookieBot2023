@@ -4,13 +4,13 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -39,8 +39,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setElevatorMotorSpeed(double speed) {
-    if (ensureElevatorSafety()) {
+    if (isValidSpeed(speed)) {
       elevatorMotor.set(speed);
+    } else {
+      elevatorMotor.set(0);
     }
   }
 
@@ -56,12 +58,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     return true;
   }
 
+  public boolean isValidSpeed(double speed) {
+    if ((elevatorAtMin() && speed < 0) || (elevatorAtMax() && speed > 0)) {
+      return false;
+    }
+    return true;
+  }
+
   public boolean elevatorAtMin() {
-    return minHallEffectSensor.get();
+    return !minHallEffectSensor.get();
   }
 
   public boolean elevatorAtMax() {
-    if (getElevatorMotorPosition() >= 1.980) { // Change 0 to rotation value
+    if (getElevatorMotorPosition() >= 1.1) {
       return true;
     }
     return false;
@@ -74,5 +83,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Minimum HallEffect Sensor", elevatorAtMin());
+    SmartDashboard.putNumber("Elevator Motor Position", getElevatorMotorPosition());
+    SmartDashboard.putNumber("Elevator Motor Speed", getElevatorMotorSpeed());
+    SmartDashboard.putBoolean("Elevator Is At Max", elevatorAtMax());
+    SmartDashboard.putBoolean("Elevator Is Safe", ensureElevatorSafety());
   }
 }

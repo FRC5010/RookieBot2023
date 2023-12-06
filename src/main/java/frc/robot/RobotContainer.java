@@ -45,10 +45,10 @@ public class RobotContainer {
       new CANSparkMax(18, MotorType.kBrushless), new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1));
       // TODO: Channels might need to be switched
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem(
-
     new CANSparkMax(Constants.PivotConstants.pivotMotorId, MotorType.kBrushless), 
     new DigitalInput(Constants.PivotConstants.minHallEffectSensorId),
     new DigitalInput(Constants.PivotConstants.maxHallEffectSensorId));
+    
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(new CANSparkMax(
       ElevatorConstants.elevatorMotorId, MotorType.kBrushless), 
       new DigitalInput(ElevatorConstants.minHallEffectSensorId));
@@ -56,6 +56,7 @@ public class RobotContainer {
 
   private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
   private final Joystick operatorJoystick = new Joystick(OIConstants.kOperatorYAxis);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,8 +69,8 @@ public class RobotContainer {
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRotAxis), // +
       () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
     
-    /* pivotSubsystem.setDefaultCommand(
-        new PivotElevator(pivotSubsystem, () -> operatorJoystick.getRawAxis(OIConstants.kOperatorYAxis))); */
+    pivotSubsystem.setDefaultCommand(
+        new PivotElevator(pivotSubsystem, () -> operatorJoystick.getRawAxis(OIConstants.kOperatorYAxis2)));
     
     elevatorSubsystem.setDefaultCommand(new Elevator(elevatorSubsystem, () -> operatorJoystick.getRawAxis(OIConstants.kOperatorYAxis)));
     // Configure the trigger bindings
