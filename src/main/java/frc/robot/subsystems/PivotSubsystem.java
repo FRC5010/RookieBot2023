@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -25,7 +24,9 @@ public class PivotSubsystem extends SubsystemBase {
     this.maxHallEffectSensor = maxHallEffectSensor;
   }
 
-
+  @Override
+  public void periodic() {
+  }
   
   public double getPivotMotorPosition() {
     return absolutePivotEncoder.getPosition();
@@ -35,12 +36,8 @@ public class PivotSubsystem extends SubsystemBase {
     return pivotMotor.get();
   }
 
-  public double getPivotMotorCurrent() {
-    return pivotMotor.getAppliedOutput();
-  }
-
   public void setPivotSpeed(double speed) {
-    if (true)
+    if (ensurePivotSafety())
       pivotMotor.set(speed);
   }
 
@@ -53,21 +50,10 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public boolean isAtMin() {
-    return !minHallEffectSensor.get();
+    return minHallEffectSensor.get();
   }
 
   public boolean isAtMax() {
-    return !maxHallEffectSensor.get();
-  }
-
-  @Override
-  public void periodic() {
-    SmartDashboard.putBoolean("isPivotAtMax", isAtMax());
-    SmartDashboard.putBoolean("isPivotAtMin", isAtMin());
-    SmartDashboard.putBoolean("IsPivotSafe", ensurePivotSafety());
-    SmartDashboard.putNumber("PivotMotorPosition", getPivotMotorPosition());
-    SmartDashboard.putNumber("PivotMotorSpeed", getPivotMotorSpeed());
-    SmartDashboard.putNumber("PivotMotorCurrent", getPivotMotorCurrent());
-
+    return maxHallEffectSensor.get();
   }
 }
