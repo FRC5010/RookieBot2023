@@ -5,35 +5,34 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PivotSubsystem;
 
-public class PivotElevator extends CommandBase {
-  PivotSubsystem pivotSubsystem;
-  Supplier<Double> ySpeed;
-  /** Creates a new PivotElevator. */
-  public PivotElevator(PivotSubsystem pivotSubsystem, Supplier<Double> ySpeed) {
-    this.pivotSubsystem = pivotSubsystem;
-    this.ySpeed = ySpeed;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IntakeSubsystem;
+
+public class RunIntake extends CommandBase {
+  /** Creates a new RunIntake. */
+  private IntakeSubsystem intakeSubsystem;
+  private Supplier<Double> spinVelocity;
+
+  /** Creates a new runIntake. */
+  public RunIntake(IntakeSubsystem intakeSubsystem, Supplier<Double> spinVelocity) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(pivotSubsystem);
+    this.intakeSubsystem = intakeSubsystem;
+    this.spinVelocity = spinVelocity;
+    addRequirements(this.intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putString("Name", getName());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-<<<<<<< HEAD
-    double speed = ySpeed.get();
-    pivotSubsystem.setPivotSpeed(speed/5 );
-=======
-    double speed = -ySpeed.get();
-    pivotSubsystem.setPivotSpeed(speed / 5);
->>>>>>> 71a0d09be190593d64a8b8b4748a9daa9634d54a
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

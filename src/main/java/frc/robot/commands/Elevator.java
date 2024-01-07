@@ -5,18 +5,20 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PivotSubsystem;
 
-public class PivotElevator extends CommandBase {
-  PivotSubsystem pivotSubsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ElevatorSubsystem;
+
+public class Elevator extends CommandBase {
+  /** Creates a new Elevator. */
+  ElevatorSubsystem elevatorSubsystem;
   Supplier<Double> ySpeed;
-  /** Creates a new PivotElevator. */
-  public PivotElevator(PivotSubsystem pivotSubsystem, Supplier<Double> ySpeed) {
-    this.pivotSubsystem = pivotSubsystem;
+
+  public Elevator(ElevatorSubsystem elevatorSubsystem, Supplier<Double> ySpeed) {
+    this.elevatorSubsystem = elevatorSubsystem;
     this.ySpeed = ySpeed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(pivotSubsystem);
+    addRequirements(elevatorSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -26,13 +28,8 @@ public class PivotElevator extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-<<<<<<< HEAD
-    double speed = ySpeed.get();
-    pivotSubsystem.setPivotSpeed(speed/5 );
-=======
     double speed = -ySpeed.get();
-    pivotSubsystem.setPivotSpeed(speed / 5);
->>>>>>> 71a0d09be190593d64a8b8b4748a9daa9634d54a
+    elevatorSubsystem.setElevatorMotorSpeed(speed / 4);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,4 +41,5 @@ public class PivotElevator extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }
