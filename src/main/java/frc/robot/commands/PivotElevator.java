@@ -29,7 +29,7 @@ public class PivotElevator extends CommandBase {
   @Override
   public void execute() {
     double speed = ySpeed.get();
-    pivotSubsystem.setPivotSpeed(speed / 10);
+    pivotSubsystem.setPivotSpeed(speed/5 );
   }
 
   // Called once the command ends or is interrupted.
